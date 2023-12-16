@@ -37,7 +37,7 @@ flags.DEFINE_list(
 )
 flags.DEFINE_integer(
     "trainer_watchdog_timeout_seconds",
-    3600,
+    7200,
     "Timeout for the trainer watchdog in seconds. "
     "If the trainer.step does not increment within this interval, "
     "the watchdog will log the stack traces of all threads.",
@@ -64,6 +64,7 @@ def get_trainer_config(trainer_config_fn: Optional[TrainerConfigFn] = None) -> S
     trainer_config.start_trace_steps = [int(el) for el in FLAGS.trace_at_steps]
     if trainer_config.watchdog_timeout_seconds is None:
         trainer_config.watchdog_timeout_seconds = FLAGS.trainer_watchdog_timeout_seconds
+        print(f"kdebug:setting trainer_config.watchdog_timeout_seconds={FLAGS.trainer_watchdog_timeout_seconds}")
 
     for eval_cfg in trainer_config.evalers.values():
         eval_cfg.trace_at_iters = [int(el) for el in FLAGS.eval_trace_at_iters]
